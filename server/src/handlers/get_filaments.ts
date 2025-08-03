@@ -1,8 +1,22 @@
 
+import { db } from '../db';
+import { filamentsTable } from '../db/schema';
 import { type Filament } from '../schema';
 
 export const getFilaments = async (): Promise<Filament[]> => {
-    // This is a placeholder declaration! Real code should be implemented here.
-    // The goal of this handler is fetching all registered filaments from the database.
-    return [];
+  try {
+    const results = await db.select()
+      .from(filamentsTable)
+      .execute();
+
+    // Convert numeric fields back to numbers before returning
+    return results.map(filament => ({
+      ...filament,
+      cost_per_kg: parseFloat(filament.cost_per_kg),
+      density: parseFloat(filament.density)
+    }));
+  } catch (error) {
+    console.error('Failed to fetch filaments:', error);
+    throw error;
+  }
 };
