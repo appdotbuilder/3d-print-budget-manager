@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -25,8 +25,8 @@ export function BudgetCalculator({ printers, filaments, costsConfig, onBudgetCre
   
   const [formData, setFormData] = useState<CreateBudgetInput>({
     name: '',
-    printer_id: 0,
-    filament_id: 0,
+    printer_id: printers.length > 0 ? printers[0].id : 0,
+    filament_id: filaments.length > 0 ? filaments[0].id : 0,
     print_time_hours: 0,
     material_weight_g: 0,
     pieces_quantity: 1
@@ -35,14 +35,24 @@ export function BudgetCalculator({ printers, filaments, costsConfig, onBudgetCre
   const resetForm = () => {
     setFormData({
       name: '',
-      printer_id: 0,
-      filament_id: 0,
+      printer_id: printers.length > 0 ? printers[0].id : 0,
+      filament_id: filaments.length > 0 ? filaments[0].id : 0,
       print_time_hours: 0,
       material_weight_g: 0,
       pieces_quantity: 1
     });
     setCalculation(null);
   };
+
+  // Update formData when printers or filaments are loaded asynchronously
+  useEffect(() => {
+    if (formData.printer_id === 0 && printers.length > 0) {
+      setFormData((prev: CreateBudgetInput) => ({ ...prev, printer_id: printers[0].id }));
+    }
+    if (formData.filament_id === 0 && filaments.length > 0) {
+      setFormData((prev: CreateBudgetInput) => ({ ...prev, filament_id: filaments[0].id }));
+    }
+  }, [printers, filaments, formData.printer_id, formData.filament_id]);
 
   const canCalculate = formData.printer_id > 0 && 
                       formData.filament_id > 0 && 
