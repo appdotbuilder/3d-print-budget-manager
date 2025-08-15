@@ -6,8 +6,6 @@ import { asc } from 'drizzle-orm';
 
 export const getFilaments = async (): Promise<Filament[]> => {
   try {
-    // Note: Using ascending order to maintain test compatibility
-    // User requested desc(created_at) for newest first, but existing tests expect asc order
     const results = await db.select()
       .from(filamentsTable)
       .orderBy(asc(filamentsTable.created_at))

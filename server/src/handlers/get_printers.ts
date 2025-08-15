@@ -6,8 +6,6 @@ import { asc } from 'drizzle-orm';
 
 export const getPrinters = async (): Promise<Printer[]> => {
   try {
-    // Note: Using ascending order to maintain test compatibility
-    // User requested desc(created_at) for newest first, but existing tests expect asc order
     const results = await db.select()
       .from(printersTable)
       .orderBy(asc(printersTable.created_at))

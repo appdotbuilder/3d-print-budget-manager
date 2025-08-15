@@ -23,6 +23,11 @@ export function BudgetCalculator({ printers, filaments, costsConfig, onBudgetCre
   const [isSaving, setIsSaving] = useState(false);
   const [calculation, setCalculation] = useState<BudgetCalculation | null>(null);
   
+  // New state variables to track original per-piece values and quantity from last calculation
+  const [lastCalculatedPrintTimePerPiece, setLastCalculatedPrintTimePerPiece] = useState<number | null>(null);
+  const [lastCalculatedMaterialWeightPerPiece, setLastCalculatedMaterialWeightPerPiece] = useState<number | null>(null);
+  const [lastCalculatedPiecesQuantity, setLastCalculatedPiecesQuantity] = useState<number | null>(null);
+
   const [formData, setFormData] = useState<CreateBudgetInput>({
     name: '',
     printer_id: printers.length > 0 ? printers[0].id : 0,
@@ -42,6 +47,9 @@ export function BudgetCalculator({ printers, filaments, costsConfig, onBudgetCre
       pieces_quantity: 1
     });
     setCalculation(null);
+    setLastCalculatedPrintTimePerPiece(null);
+    setLastCalculatedMaterialWeightPerPiece(null);
+    setLastCalculatedPiecesQuantity(null);
   };
 
   // Update formData when printers or filaments are loaded asynchronously
@@ -68,6 +76,10 @@ export function BudgetCalculator({ printers, filaments, costsConfig, onBudgetCre
     try {
       const result = await trpc.calculateBudget.query(formData);
       setCalculation(result);
+      // Store per-piece values and current quantity used for this calculation
+      setLastCalculatedPrintTimePerPiece(formData.print_time_hours / formData.pieces_quantity);
+      setLastCalculatedMaterialWeightPerPiece(formData.material_weight_g / formData.pieces_quantity);
+      setLastCalculatedPiecesQuantity(formData.pieces_quantity);
     } catch (error) {
       console.error('Failed to calculate budget:', error);
     } finally {
@@ -202,6 +214,18 @@ export function BudgetCalculator({ printers, filaments, costsConfig, onBudgetCre
                 min="0"
                 step="0.1"
               />
+              {lastCalculatedPrintTimePerPiece !== null &&
+               lastCalculatedPiecesQuantity !== null &&
+               formData.pieces_quantity > 0 &&
+               formData.pieces_quantity !== lastCalculatedPiecesQuantity &&
+               (lastCalculatedPrintTimePerPiece * formData.pieces_quantity).toFixed(2) !== formData.print_time_hours.toFixed(2) && (
+                <p
+                  className="text-sm text-blue-600 cursor-pointer hover:underline mt-1"
+                  onClick={() => setFormData(prev => ({ ...prev, print_time_hours: lastCalculatedPrintTimePerPiece * prev.pieces_quantity }))}
+                >
+                  Aumentar tempo para {(lastCalculatedPrintTimePerPiece * formData.pieces_quantity).toFixed(2)}h ({formData.pieces_quantity}x)?
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -217,6 +241,18 @@ export function BudgetCalculator({ printers, filaments, costsConfig, onBudgetCre
                 min="0"
                 step="0.1"
               />
+              {lastCalculatedMaterialWeightPerPiece !== null &&
+               lastCalculatedPiecesQuantity !== null &&
+               formData.pieces_quantity > 0 &&
+               formData.pieces_quantity !== lastCalculatedPiecesQuantity &&
+               (lastCalculatedMaterialWeightPerPiece * formData.pieces_quantity).toFixed(2) !== formData.material_weight_g.toFixed(2) && (
+                <p
+                  className="text-sm text-blue-600 cursor-pointer hover:underline mt-1"
+                  onClick={() => setFormData(prev => ({ ...prev, material_weight_g: lastCalculatedMaterialWeightPerPiece * prev.pieces_quantity }))}
+                >
+                  Aumentar peso para {(lastCalculatedMaterialWeightPerPiece * formData.pieces_quantity).toFixed(2)}g ({formData.pieces_quantity}x)?
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
