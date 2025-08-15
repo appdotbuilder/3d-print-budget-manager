@@ -249,23 +249,31 @@ export function BudgetCalculator({ printers, filaments, costsConfig, onBudgetCre
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* Summary */}
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold text-green-800 mb-2">🎯 Valores Totais do Projeto</h3>
+              <p className="text-sm text-slate-600">Valores calculados para {formData.pieces_quantity} peça{formData.pieces_quantity !== 1 ? 's' : ''}</p>
+            </div>
+            
+            {/* Summary - Total Values */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center p-3 bg-white rounded-lg">
-                <p className="text-sm text-slate-600">Custo Total</p>
+                <p className="text-sm text-slate-600">Custo Total ({formData.pieces_quantity} peças)</p>
                 <p className="text-xl font-bold text-slate-900">R$ {calculation.total_cost.toFixed(2)}</p>
               </div>
               <div className="text-center p-3 bg-white rounded-lg">
-                <p className="text-sm text-slate-600">Preço de Venda</p>
+                <p className="text-sm text-slate-600">Preço de Venda Total</p>
                 <p className="text-xl font-bold text-green-600">R$ {calculation.sale_price.toFixed(2)}</p>
               </div>
               <div className="text-center p-3 bg-white rounded-lg">
-                <p className="text-sm text-slate-600">Lucro</p>
+                <p className="text-sm text-slate-600">Lucro Total</p>
                 <p className="text-xl font-bold text-blue-600">R$ {calculation.profit_amount.toFixed(2)}</p>
               </div>
               <div className="text-center p-3 bg-white rounded-lg">
-                <p className="text-sm text-slate-600">Margem</p>
+                <p className="text-sm text-slate-600">Margem de Lucro</p>
                 <p className="text-xl font-bold text-purple-600">{calculation.profit_margin_percentage.toFixed(1)}%</p>
+                <p className="text-xs text-slate-500 mt-1">
+                  {selectedPrinter ? `(Markup: ${selectedPrinter.profit_percentage}%)` : ''}
+                </p>
               </div>
             </div>
 
@@ -308,16 +316,20 @@ export function BudgetCalculator({ printers, filaments, costsConfig, onBudgetCre
                 <h4 className="font-semibold text-green-800">📊 Valores por Peça</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span>Custo por peça:</span>
+                    <span>Custo unitário:</span>
                     <span>R$ {calculation.cost_per_piece.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Preço por peça:</span>
+                    <span>Preço unitário:</span>
                     <span>R$ {calculation.price_per_piece.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Lucro unitário:</span>
+                    <span>R$ {(calculation.profit_amount / formData.pieces_quantity).toFixed(2)}</span>
                   </div>
                   <Separator />
                   <div className="text-center p-2 bg-white rounded">
-                    <p className="text-xs text-slate-600">Quantidade</p>
+                    <p className="text-xs text-slate-600">Quantidade Total</p>
                     <p className="text-lg font-bold">{formData.pieces_quantity} peças</p>
                   </div>
                 </div>
@@ -326,23 +338,32 @@ export function BudgetCalculator({ printers, filaments, costsConfig, onBudgetCre
 
             {/* Selected Items Info */}
             <Separator />
-            <div className="flex gap-4 text-sm">
-              {selectedPrinter && (
-                <Badge variant="outline" className="bg-blue-50">
-                  🖨️ {selectedPrinter.name}
+            <div className="space-y-2">
+              <div className="flex gap-4 text-sm">
+                {selectedPrinter && (
+                  <Badge variant="outline" className="bg-blue-50">
+                    🖨️ {selectedPrinter.name}
+                  </Badge>
+                )}
+                {selectedFilament && (
+                  <Badge variant="outline" className="bg-green-50">
+                    🧵 {selectedFilament.brand} {selectedFilament.name}
+                  </Badge>
+                )}
+                <Badge variant="outline" className="bg-orange-50">
+                  ⏱️ {formData.print_time_hours}h
                 </Badge>
-              )}
-              {selectedFilament && (
-                <Badge variant="outline" className="bg-green-50">
-                  🧵 {selectedFilament.brand} {selectedFilament.name}
+                <Badge variant="outline" className="bg-purple-50">
+                  ⚖️ {formData.material_weight_g}g
                 </Badge>
+              </div>
+              
+              {selectedPrinter && selectedPrinter.profit_percentage === 100 && (
+                <div className="text-xs text-slate-600 bg-blue-50 p-2 rounded">
+                  💡 <strong>Dica:</strong> Markup de 100% resulta em margem de lucro de 50% 
+                  (lucro sobre preço de venda). Para diferentes margens, ajuste o percentual de lucro da impressora.
+                </div>
               )}
-              <Badge variant="outline" className="bg-orange-50">
-                ⏱️ {formData.print_time_hours}h
-              </Badge>
-              <Badge variant="outline" className="bg-purple-50">
-                ⚖️ {formData.material_weight_g}g
-              </Badge>
             </div>
 
             {/* Save Button */}
