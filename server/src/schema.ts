@@ -19,7 +19,7 @@ export const createPrinterInputSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório"),
   power_consumption: z.number().positive("Consumo de energia deve ser positivo"),
   print_speed: z.number().positive("Velocidade de impressão deve ser positiva"),
-  profit_percentage: z.number().min(0).max(100, "Percentual de lucro deve estar entre 0 e 100")
+  profit_percentage: z.number().min(0, "Percentual de lucro deve ser não negativo")
 });
 
 export type CreatePrinterInput = z.infer<typeof createPrinterInputSchema>;
@@ -30,7 +30,7 @@ export const updatePrinterInputSchema = z.object({
   name: z.string().min(1).optional(),
   power_consumption: z.number().positive().optional(),
   print_speed: z.number().positive().optional(),
-  profit_percentage: z.number().min(0).max(100).optional()
+  profit_percentage: z.number().min(0).optional()
 });
 
 export type UpdatePrinterInput = z.infer<typeof updatePrinterInputSchema>;
