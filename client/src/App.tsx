@@ -88,8 +88,8 @@ function App() {
             </div>
           </div>
           
-          {/* Stats Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+          {/* Stats Cards - Updated to be responsive with a single column on extra small screens */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6">
             <Card className="border-0 shadow-sm bg-white/60 backdrop-blur-sm">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
