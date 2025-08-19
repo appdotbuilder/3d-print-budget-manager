@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Calculator, ClipboardList, Printer as PrinterIcon, Package, Settings } from 'lucide-react';
 import { trpc } from '@/utils/trpc';
 import { PrinterManagement } from '@/components/PrinterManagement';
 import { FilamentManagement } from '@/components/FilamentManagement';
@@ -154,19 +155,19 @@ function App() {
         <Tabs defaultValue="calculator" className="space-y-6">
           <TabsList className="grid w-full grid-cols-5 bg-white/60 backdrop-blur-sm">
             <TabsTrigger value="calculator" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-              📊 Calculadora
+              <Calculator className="size-5" /> Calculadora
             </TabsTrigger>
             <TabsTrigger value="budgets" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-              📋 Orçamentos
+              <ClipboardList className="size-5" /> Orçamentos
             </TabsTrigger>
             <TabsTrigger value="printers" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-              🖨️ Impressoras
+              <PrinterIcon className="size-5" /> Impressoras
             </TabsTrigger>
             <TabsTrigger value="filaments" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-              🧵 Filamentos
+              <Package className="size-5" /> Filamentos
             </TabsTrigger>
             <TabsTrigger value="costs" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-              ⚙️ Custos
+              <Settings className="size-5" /> Custos
             </TabsTrigger>
           </TabsList>
 
