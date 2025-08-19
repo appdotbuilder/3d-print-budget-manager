@@ -13,7 +13,8 @@ import {
   createFilamentInputSchema,
   updateFilamentInputSchema,
   costsConfigInputSchema,
-  createBudgetInputSchema
+  createBudgetInputSchema,
+  getBudgetsInputSchema
 } from './schema';
 
 // Import handlers
@@ -96,7 +97,8 @@ const appRouter = router({
     .mutation(({ input }) => createBudget(input)),
   
   getBudgets: publicProcedure
-    .query(() => getBudgets()),
+    .input(getBudgetsInputSchema.optional())
+    .query(({ input }) => getBudgets(input || {})),
   
   getBudgetWithDetails: publicProcedure
     .input(z.object({ id: z.number() }))

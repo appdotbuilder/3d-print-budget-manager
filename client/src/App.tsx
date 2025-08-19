@@ -22,7 +22,7 @@ function App() {
       const [printersData, filamentsData, budgetsData, costsData] = await Promise.all([
         trpc.getPrinters.query(),
         trpc.getFilaments.query(),
-        trpc.getBudgets.query(),
+        trpc.getBudgets.query({}),
         trpc.getCostsConfig.query()
       ]);
       
@@ -51,8 +51,9 @@ function App() {
     setFilaments(data);
   }, []);
 
-  const refreshBudgets = useCallback(async () => {
-    const data = await trpc.getBudgets.query();
+  // Updated to accept an optional search query
+  const refreshBudgets = useCallback(async (query?: string) => {
+    const data = await trpc.getBudgets.query({ query });
     setBudgets(data);
   }, []);
 
@@ -185,7 +186,7 @@ function App() {
                   printers={printers}
                   filaments={filaments}
                   costsConfig={costsConfig}
-                  onBudgetCreated={refreshBudgets}
+                  onBudgetCreated={() => refreshBudgets()} // Refresh budgets after creation
                 />
               </CardContent>
             </Card>
@@ -207,7 +208,8 @@ function App() {
                   budgets={budgets}
                   printers={printers}
                   filaments={filaments}
-                  onBudgetDeleted={refreshBudgets}
+                  onBudgetDeleted={() => refreshBudgets()} // Refresh budgets after deletion
+                  onBudgetListRefresh={refreshBudgets} // Pass the new prop
                 />
               </CardContent>
             </Card>

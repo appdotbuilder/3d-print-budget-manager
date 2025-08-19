@@ -1,13 +1,23 @@
 
 import { db } from '../db';
 import { budgetsTable } from '../db/schema';
-import { type Budget } from '../schema';
+import { type Budget, type GetBudgetsInput } from '../schema';
+import { desc, ilike } from 'drizzle-orm';
 
-export const getBudgets = async (): Promise<Budget[]> => {
+export const getBudgets = async (input: GetBudgetsInput = {}): Promise<Budget[]> => {
   try {
-    const results = await db.select()
-      .from(budgetsTable)
-      .execute();
+    // Build base query
+    const baseQuery = db.select().from(budgetsTable);
+    
+    // Apply conditional filtering and execute in one step
+    const results = input.query 
+      ? await baseQuery
+          .where(ilike(budgetsTable.name, `%${input.query}%`))
+          .orderBy(desc(budgetsTable.created_at))
+          .execute()
+      : await baseQuery
+          .orderBy(desc(budgetsTable.created_at))
+          .execute();
 
     // Convert numeric fields back to numbers
     return results.map(budget => ({

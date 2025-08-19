@@ -157,3 +157,10 @@ export const budgetWithDetailsSchema = budgetSchema.extend({
 });
 
 export type BudgetWithDetails = z.infer<typeof budgetWithDetailsSchema>;
+
+// Input schema for fetching multiple budgets with search/filters
+export const getBudgetsInputSchema = z.object({
+  query: z.string().optional(), // Optional search query
+}).default({});
+
+export type GetBudgetsInput = z.infer<typeof getBudgetsInputSchema>;

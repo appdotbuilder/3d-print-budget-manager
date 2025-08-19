@@ -1,10 +1,11 @@
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Separator } from '@/components/ui/separator';
+import { Input } from '@/components/ui/input';
 import { trpc } from '@/utils/trpc';
 import type { Budget, Printer, Filament } from '../../../server/src/schema';
 
@@ -13,16 +14,31 @@ interface BudgetListProps {
   printers: Printer[];
   filaments: Filament[];
   onBudgetDeleted: () => void;
+  onBudgetListRefresh: (query?: string) => void;
 }
 
-export function BudgetList({ budgets, printers, filaments, onBudgetDeleted }: BudgetListProps) {
+export function BudgetList({ budgets, printers, filaments, onBudgetDeleted, onBudgetListRefresh }: BudgetListProps) {
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Use useCallback for memoizing the search function to be used in useEffect
+  const handleSearch = useCallback(() => {
+    onBudgetListRefresh(searchQuery);
+  }, [onBudgetListRefresh, searchQuery]);
+
+  // Trigger search when searchQuery changes
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      handleSearch();
+    }, 300); // Debounce search
+    return () => clearTimeout(handler);
+  }, [searchQuery, handleSearch]);
 
   const handleDelete = async (id: number) => {
     setDeletingId(id);
     try {
       await trpc.deleteBudget.mutate({ id });
-      onBudgetDeleted();
+      onBudgetDeleted(); // Notify parent of deletion, parent will re-fetch all budgets
     } catch (error) {
       console.error('Failed to delete budget:', error);
     } finally {
@@ -40,12 +56,12 @@ export function BudgetList({ budgets, printers, filaments, onBudgetDeleted }: Bu
     return filament ? `${filament.brand} ${filament.name} - ${filament.color}` : `Filamento #${filamentId}`;
   };
 
-  if (budgets.length === 0) {
+  if (budgets.length === 0 && !searchQuery) {
     return (
       <Card className="border-slate-200">
         <CardContent className="flex flex-col items-center justify-center py-12 text-center">
           <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-            <span className="text-2xl">📋</span>
+            <span className="text-2xl">📊</span>
           </div>
           <h3 className="text-lg font-medium text-slate-900 mb-2">Nenhum orçamento salvo</h3>
           <p className="text-slate-600 mb-4">Use a calculadora para criar seu primeiro orçamento</p>
@@ -56,11 +72,31 @@ export function BudgetList({ budgets, printers, filaments, onBudgetDeleted }: Bu
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4">
         <h3 className="text-lg font-semibold text-slate-900">
           Orçamentos Salvos ({budgets.length})
         </h3>
+        {/* Search Input */}
+        <Input
+          type="text"
+          placeholder="Buscar orçamentos..."
+          value={searchQuery}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+          className="max-w-xs"
+        />
       </div>
+
+      {budgets.length === 0 && searchQuery && (
+        <Card className="border-slate-200">
+          <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+              <span className="text-2xl">🔍</span>
+            </div>
+            <h3 className="text-lg font-medium text-slate-900 mb-2">Nenhum orçamento encontrado</h3>
+            <p className="text-slate-600 mb-4">Tente uma busca diferente ou adicione novos orçamentos.</p>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {budgets.map((budget: Budget) => (
@@ -127,7 +163,7 @@ export function BudgetList({ budgets, printers, filaments, onBudgetDeleted }: Bu
               {/* Actions */}
               <div className="flex justify-between items-center">
                 <div className="text-xs text-slate-500">
-                  {budget.created_at.toLocaleDateString('pt-BR')}
+                  Criado em {budget.created_at.toLocaleDateString('pt-BR')}
                 </div>
 
                 <AlertDialog>
