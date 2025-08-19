@@ -83,8 +83,8 @@ function App() {
               <span className="text-white text-xl">🖨️</span>
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-slate-900">PrintBudget Pro</h1>
-              <p className="text-slate-600">Gerenciamento inteligente de orçamentos para impressão 3D</p>
+              <h1 className="text-3xl font-bold text-slate-900">Orçamento Impressão 3D</h1>
+              <p className="text-slate-600">OI3D</p>
             </div>
           </div>
           
