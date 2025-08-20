@@ -115,6 +115,13 @@ export function FilamentManagement({ filaments, onFilamentListRefresh }: Filamen
     });
   };
 
+  const onEditDialogClose = (open: boolean) => {
+    if (!open) {
+      setEditingFilament(null);
+      resetForm();
+    }
+  };
+
   const getColorDot = (color: string) => {
     const colorMap: { [key: string]: string } = {
       'branco': 'bg-white border-2 border-slate-300',
@@ -336,128 +343,13 @@ export function FilamentManagement({ filaments, onFilamentListRefresh }: Filamen
                     </div>
                     
                     <div className="flex gap-2">
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => openEditDialog(filament)}
-                          >
-                            ✏️
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Editar Filamento</DialogTitle>
-                          </DialogHeader>
-                          <form onSubmit={handleUpdate} className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
-                              <div className="space-y-2">
-                                <Label htmlFor="edit-name">Nome</Label>
-                                <Input
-                                  id="edit-name"
-                                  value={formData.name}
-                                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setFormData((prev: CreateFilamentInput) => ({ ...prev, name: e.target.value }))
-                                  }
-                                  required
-                                />
-                              </div>
-                              
-                              <div className="space-y-2">
-                                <Label htmlFor="edit-brand">Marca</Label>
-                                <Input
-                                  id="edit-brand"
-                                  value={formData.brand}
-                                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setFormData((prev: CreateFilamentInput) => ({ ...prev, brand: e.target.value }))
-                                  }
-                                  required
-                                />
-                              </div>
-                              
-                              <div className="space-y-2">
-                                <Label htmlFor="edit-material">Material</Label>
-                                <Input
-                                  id="edit-material"
-                                  value={formData.material_type}
-                                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setFormData((prev: CreateFilamentInput) => ({ ...prev, material_type: e.target.value }))
-                                  }
-                                  required
-                                />
-                              </div>
-                              
-                              <div className="space-y-2">
-                                <Label htmlFor="edit-color">Cor</Label>
-                                <Select
-                                  value={formData.color}
-                                  onValueChange={(value: string) =>
-                                    setFormData((prev: CreateFilamentInput) => ({ ...prev, color: value }))
-                                  }
-                                >
-                                  <SelectTrigger id="edit-color">
-                                    <SelectValue placeholder="Selecione uma cor">
-                                      {formData.color && (
-                                        <div className="flex items-center gap-2">
-                                          <div className={`w-4 h-4 rounded-full ${getColorDot(formData.color)}`} />
-                                          {formData.color}
-                                        </div>
-                                      )}
-                                    </SelectValue>
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    {predefinedColors.map((color) => (
-                                      <SelectItem key={color} value={color}>
-                                        <div className="flex items-center gap-2">
-                                          <div className={`w-4 h-4 rounded-full ${getColorDot(color)}`} />
-                                          {color}
-                                        </div>
-                                      </SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                              
-                              <div className="space-y-2">
-                                <Label htmlFor="edit-cost">Custo/Kg (R$)</Label>
-                                <Input
-                                  id="edit-cost"
-                                  type="number"
-                                  value={formData.cost_per_kg}
-                                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setFormData((prev: CreateFilamentInput) => ({ ...prev, cost_per_kg: parseFloat(e.target.value) || 0 }))
-                                  }
-                                  min="0"
-                                  step="0.01"
-                                  required
-                                />
-                              </div>
-                              
-                              <div className="space-y-2">
-                                <Label htmlFor="edit-density">Densidade (g/cm³)</Label>
-                                <Input
-                                  id="edit-density"
-                                  type="number"
-                                  value={formData.density}
-                                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setFormData((prev: CreateFilamentInput) => ({ ...prev, density: parseFloat(e.target.value) || 0 }))
-                                  }
-                                  min="0"
-                                  step="0.01"
-                                  required
-                                />
-                              </div>
-                            </div>
-                            
-                            <div className="flex justify-end gap-2">
-                              <Button type="submit" disabled={isCreating}>
-                                {isCreating ? 'Salvando...' : 'Salvar'}
-                              </Button>
-                            </div>
-                          </form>
-                        </DialogContent>
-                      </Dialog>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => openEditDialog(filament)}
+                      >
+                        ✏️
+                      </Button>
                       
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
@@ -492,6 +384,124 @@ export function FilamentManagement({ filaments, onFilamentListRefresh }: Filamen
           </div>
         )}
       </div>
+
+      {/* Centralized Edit Dialog */}
+      <Dialog open={editingFilament !== null} onOpenChange={onEditDialogClose}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar Filamento</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleUpdate} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="edit-name">Nome</Label>
+                <Input
+                  id="edit-name"
+                  value={formData.name}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setFormData((prev: CreateFilamentInput) => ({ ...prev, name: e.target.value }))
+                  }
+                  required
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="edit-brand">Marca</Label>
+                <Input
+                  id="edit-brand"
+                  value={formData.brand}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setFormData((prev: CreateFilamentInput) => ({ ...prev, brand: e.target.value }))
+                  }
+                  required
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="edit-material">Material</Label>
+                <Input
+                  id="edit-material"
+                  value={formData.material_type}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setFormData((prev: CreateFilamentInput) => ({ ...prev, material_type: e.target.value }))
+                  }
+                  required
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="edit-color">Cor</Label>
+                <Select
+                  value={formData.color}
+                  onValueChange={(value: string) =>
+                    setFormData((prev: CreateFilamentInput) => ({ ...prev, color: value }))
+                  }
+                >
+                  <SelectTrigger id="edit-color">
+                    <SelectValue placeholder="Selecione uma cor">
+                      {formData.color && (
+                        <div className="flex items-center gap-2">
+                          <div className={`w-4 h-4 rounded-full ${getColorDot(formData.color)}`} />
+                          {formData.color}
+                        </div>
+                      )}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {predefinedColors.map((color) => (
+                      <SelectItem key={color} value={color}>
+                        <div className="flex items-center gap-2">
+                          <div className={`w-4 h-4 rounded-full ${getColorDot(color)}`} />
+                          {color}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="edit-cost">Custo/Kg (R$)</Label>
+                <Input
+                  id="edit-cost"
+                  type="number"
+                  value={formData.cost_per_kg}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setFormData((prev: CreateFilamentInput) => ({ ...prev, cost_per_kg: parseFloat(e.target.value) || 0 }))
+                  }
+                  min="0"
+                  step="0.01"
+                  required
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="edit-density">Densidade (g/cm³)</Label>
+                <Input
+                  id="edit-density"
+                  type="number"
+                  value={formData.density}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setFormData((prev: CreateFilamentInput) => ({ ...prev, density: parseFloat(e.target.value) || 0 }))
+                  }
+                  min="0"
+                  step="0.01"
+                  required
+                />
+              </div>
+            </div>
+            
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={() => onEditDialogClose(false)}>
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={isCreating}>
+                {isCreating ? 'Salvando...' : 'Salvar'}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
