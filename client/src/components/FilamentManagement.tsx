@@ -7,9 +7,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { trpc } from '@/utils/trpc';
 import type { Filament, CreateFilamentInput } from '../../../server/src/schema';
+
+const predefinedColors = [
+  'Branco', 'Preto', 'Vermelho', 'Azul', 'Verde', 'Amarelo',
+  'Laranja', 'Roxo', 'Rosa', 'Cinza', 'Transparente'
+];
 
 interface FilamentManagementProps {
   filaments: Filament[];
@@ -177,15 +183,33 @@ export function FilamentManagement({ filaments, onFilamentListRefresh }: Filamen
             
             <div className="space-y-2">
               <Label htmlFor="color">Cor</Label>
-              <Input
-                id="color"
+              <Select
                 value={formData.color}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setFormData((prev: CreateFilamentInput) => ({ ...prev, color: e.target.value }))
+                onValueChange={(value: string) =>
+                  setFormData((prev: CreateFilamentInput) => ({ ...prev, color: value }))
                 }
-                placeholder="Ex: Branco, Preto, Azul"
-                required
-              />
+              >
+                <SelectTrigger id="color">
+                  <SelectValue placeholder="Selecione uma cor">
+                    {formData.color && (
+                      <div className="flex items-center gap-2">
+                        <div className={`w-4 h-4 rounded-full ${getColorDot(formData.color)}`} />
+                        {formData.color}
+                      </div>
+                    )}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {predefinedColors.map((color) => (
+                    <SelectItem key={color} value={color}>
+                      <div className="flex items-center gap-2">
+                        <div className={`w-4 h-4 rounded-full ${getColorDot(color)}`} />
+                        {color}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             
             <div className="space-y-2">
@@ -366,14 +390,33 @@ export function FilamentManagement({ filaments, onFilamentListRefresh }: Filamen
                               
                               <div className="space-y-2">
                                 <Label htmlFor="edit-color">Cor</Label>
-                                <Input
-                                  id="edit-color"
+                                <Select
                                   value={formData.color}
-                                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setFormData((prev: CreateFilamentInput) => ({ ...prev, color: e.target.value }))
+                                  onValueChange={(value: string) =>
+                                    setFormData((prev: CreateFilamentInput) => ({ ...prev, color: value }))
                                   }
-                                  required
-                                />
+                                >
+                                  <SelectTrigger id="edit-color">
+                                    <SelectValue placeholder="Selecione uma cor">
+                                      {formData.color && (
+                                        <div className="flex items-center gap-2">
+                                          <div className={`w-4 h-4 rounded-full ${getColorDot(formData.color)}`} />
+                                          {formData.color}
+                                        </div>
+                                      )}
+                                    </SelectValue>
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {predefinedColors.map((color) => (
+                                      <SelectItem key={color} value={color}>
+                                        <div className="flex items-center gap-2">
+                                          <div className={`w-4 h-4 rounded-full ${getColorDot(color)}`} />
+                                          {color}
+                                        </div>
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
                               </div>
                               
                               <div className="space-y-2">
