@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,12 +13,13 @@ import type { Filament, CreateFilamentInput } from '../../../server/src/schema';
 
 interface FilamentManagementProps {
   filaments: Filament[];
-  onFilamentChanged: () => void;
+  onFilamentListRefresh: (query?: string) => void;
 }
 
-export function FilamentManagement({ filaments, onFilamentChanged }: FilamentManagementProps) {
+export function FilamentManagement({ filaments, onFilamentListRefresh }: FilamentManagementProps) {
   const [isCreating, setIsCreating] = useState(false);
   const [editingFilament, setEditingFilament] = useState<Filament | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const [formData, setFormData] = useState<CreateFilamentInput>({
     name: '',
     brand: '',
@@ -39,13 +40,27 @@ export function FilamentManagement({ filaments, onFilamentChanged }: FilamentMan
     });
   };
 
+  // Use useCallback for memoizing the search function to be used in useEffect
+  const handleSearch = useCallback(() => {
+    onFilamentListRefresh(searchQuery);
+  }, [onFilamentListRefresh, searchQuery]);
+
+  // Trigger search when searchQuery changes with a debounce
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      handleSearch();
+    }, 300); // Debounce search
+
+    return () => clearTimeout(handler);
+  }, [searchQuery, handleSearch]);
+
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsCreating(true);
     try {
       await trpc.createFilament.mutate(formData);
       resetForm();
-      onFilamentChanged();
+      onFilamentListRefresh(searchQuery);
     } catch (error) {
       console.error('Failed to create filament:', error);
     } finally {
@@ -65,7 +80,7 @@ export function FilamentManagement({ filaments, onFilamentChanged }: FilamentMan
       });
       setEditingFilament(null);
       resetForm();
-      onFilamentChanged();
+      onFilamentListRefresh(searchQuery);
     } catch (error) {
       console.error('Failed to update filament:', error);
     } finally {
@@ -76,7 +91,7 @@ export function FilamentManagement({ filaments, onFilamentChanged }: FilamentMan
   const handleDelete = async (id: number) => {
     try {
       await trpc.deleteFilament.mutate({ id });
-      onFilamentChanged();
+      onFilamentListRefresh(searchQuery);
     } catch (error) {
       console.error('Failed to delete filament:', error);
     }
@@ -219,11 +234,21 @@ export function FilamentManagement({ filaments, onFilamentChanged }: FilamentMan
 
       {/* Filaments List */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-slate-900">
-          Filamentos Cadastrados ({filaments.length})
-        </h3>
+        <div className="flex items-center justify-between gap-4">
+          <h3 className="text-lg font-semibold text-slate-900">
+            Filamentos Cadastrados ({filaments.length})
+          </h3>
+          {/* Search Input */}
+          <Input
+            type="text"
+            placeholder="Buscar filamentos..."
+            value={searchQuery}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+            className="max-w-xs"
+          />
+        </div>
         
-        {filaments.length === 0 ? (
+        {filaments.length === 0 && !searchQuery ? (
           <Card className="border-slate-200">
             <CardContent className="flex flex-col items-center justify-center py-12 text-center">
               <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
@@ -231,6 +256,16 @@ export function FilamentManagement({ filaments, onFilamentChanged }: FilamentMan
               </div>
               <h3 className="text-lg font-medium text-slate-900 mb-2">Nenhum filamento cadastrado</h3>
               <p className="text-slate-600 mb-4">Adicione seus primeiros materiais de impressão</p>
+            </CardContent>
+          </Card>
+        ) : filaments.length === 0 && searchQuery ? (
+          <Card className="border-slate-200">
+            <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                <span className="text-2xl">🔍</span>
+              </div>
+              <h3 className="text-lg font-medium text-slate-900 mb-2">Nenhum filamento encontrado</h3>
+              <p className="text-slate-600 mb-4">Tente uma busca diferente ou adicione novos filamentos.</p>
             </CardContent>
           </Card>
         ) : (
@@ -389,7 +424,7 @@ export function FilamentManagement({ filaments, onFilamentChanged }: FilamentMan
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>Excluirp Filamento</AlertDialogTitle>
+                            <AlertDialogTitle>Excluir Filamento</AlertDialogTitle>
                             <AlertDialogDescription>
                               Tem certeza que deseja excluir o filamento "{filament.name}"? 
                               Esta ação não pode ser desfeita.

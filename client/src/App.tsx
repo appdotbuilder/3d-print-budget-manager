@@ -22,7 +22,7 @@ function App() {
     try {
       const [printersData, filamentsData, budgetsData, costsData] = await Promise.all([
         trpc.getPrinters.query(),
-        trpc.getFilaments.query(),
+        trpc.getFilaments.query({}),
         trpc.getBudgets.query({}),
         trpc.getCostsConfig.query()
       ]);
@@ -47,8 +47,8 @@ function App() {
     setPrinters(data);
   }, []);
 
-  const refreshFilaments = useCallback(async () => {
-    const data = await trpc.getFilaments.query();
+  const refreshFilaments = useCallback(async (query?: string) => {
+    const data = await trpc.getFilaments.query({ query });
     setFilaments(data);
   }, []);
 
@@ -250,7 +250,7 @@ function App() {
               <CardContent>
                 <FilamentManagement 
                   filaments={filaments}
-                  onFilamentChanged={refreshFilaments}
+                  onFilamentListRefresh={refreshFilaments}
                 />
               </CardContent>
             </Card>

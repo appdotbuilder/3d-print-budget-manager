@@ -12,6 +12,7 @@ import {
   updatePrinterInputSchema,
   createFilamentInputSchema,
   updateFilamentInputSchema,
+  getFilamentsInputSchema,
   costsConfigInputSchema,
   createBudgetInputSchema,
   getBudgetsInputSchema
@@ -69,7 +70,8 @@ const appRouter = router({
     .mutation(({ input }) => createFilament(input)),
   
   getFilaments: publicProcedure
-    .query(() => getFilaments()),
+    .input(getFilamentsInputSchema.optional())
+    .query(({ input }) => getFilaments(input || {})),
   
   updateFilament: publicProcedure
     .input(updateFilamentInputSchema)

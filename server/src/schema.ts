@@ -158,6 +158,13 @@ export const budgetWithDetailsSchema = budgetSchema.extend({
 
 export type BudgetWithDetails = z.infer<typeof budgetWithDetailsSchema>;
 
+// Input schema for getting filaments with optional search
+export const getFilamentsInputSchema = z.object({
+  query: z.string().optional(),
+}).default({});
+
+export type GetFilamentsInput = z.infer<typeof getFilamentsInputSchema>;
+
 // Input schema for fetching multiple budgets with search/filters
 export const getBudgetsInputSchema = z.object({
   query: z.string().optional(), // Optional search query
