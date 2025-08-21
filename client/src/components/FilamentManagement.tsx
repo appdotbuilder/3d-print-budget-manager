@@ -9,6 +9,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { Package, SearchIcon } from 'lucide-react';
 import { trpc } from '@/utils/trpc';
 import type { Filament, CreateFilamentInput } from '../../../server/src/schema';
 
@@ -283,7 +284,7 @@ export function FilamentManagement({ filaments, onFilamentListRefresh }: Filamen
           <Card className="border-slate-200">
             <CardContent className="flex flex-col items-center justify-center py-12 text-center">
               <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                <span className="text-2xl">🧵</span>
+                <Package className="size-8 text-slate-700" />
               </div>
               <h3 className="text-lg font-medium text-slate-900 mb-2">Nenhum filamento cadastrado</h3>
               <p className="text-slate-600 mb-4">Adicione seus primeiros materiais de impressão</p>
@@ -293,7 +294,7 @@ export function FilamentManagement({ filaments, onFilamentListRefresh }: Filamen
           <Card className="border-slate-200">
             <CardContent className="flex flex-col items-center justify-center py-12 text-center">
               <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                <span className="text-2xl">🔍</span>
+                <SearchIcon className="size-8 text-slate-700" />
               </div>
               <h3 className="text-lg font-medium text-slate-900 mb-2">Nenhum filamento encontrado</h3>
               <p className="text-slate-600 mb-4">Tente uma busca diferente ou adicione novos filamentos.</p>

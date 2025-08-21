@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
+import { PrinterIcon } from 'lucide-react';
 import { trpc } from '@/utils/trpc';
 import type { Printer, CreatePrinterInput } from '../../../server/src/schema';
 
@@ -181,7 +182,7 @@ export function PrinterManagement({ printers, onPrinterChanged }: PrinterManagem
           <Card className="border-slate-200">
             <CardContent className="flex flex-col items-center justify-center py-12 text-center">
               <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                <span className="text-2xl">🖨️</span>
+                <PrinterIcon className="size-8 text-slate-700" />
               </div>
               <h3 className="text-lg font-medium text-slate-900 mb-2">Nenhuma impressora cadastrada</h3>
               <p className="text-slate-600 mb-4">Comece criando sua primeira impressora 3D</p>

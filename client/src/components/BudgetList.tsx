@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
+import { ClipboardList, SearchIcon } from 'lucide-react';
 import { trpc } from '@/utils/trpc';
 import type { Budget, Printer, Filament } from '../../../server/src/schema';
 
@@ -61,7 +62,7 @@ export function BudgetList({ budgets, printers, filaments, onBudgetDeleted, onBu
       <Card className="border-slate-200">
         <CardContent className="flex flex-col items-center justify-center py-12 text-center">
           <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-            <span className="text-2xl">📊</span>
+            <ClipboardList className="size-8 text-slate-700" />
           </div>
           <h3 className="text-lg font-medium text-slate-900 mb-2">Nenhum orçamento salvo</h3>
           <p className="text-slate-600 mb-4">Use a calculadora para criar seu primeiro orçamento</p>
@@ -90,7 +91,7 @@ export function BudgetList({ budgets, printers, filaments, onBudgetDeleted, onBu
         <Card className="border-slate-200">
           <CardContent className="flex flex-col items-center justify-center py-12 text-center">
             <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-              <span className="text-2xl">🔍</span>
+              <SearchIcon className="size-8 text-slate-700" />
             </div>
             <h3 className="text-lg font-medium text-slate-900 mb-2">Nenhum orçamento encontrado</h3>
             <p className="text-slate-600 mb-4">Tente uma busca diferente ou adicione novos orçamentos.</p>

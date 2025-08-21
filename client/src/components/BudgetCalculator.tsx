@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
+import { Calculator, FileText, Settings, Eraser, DollarSign, BadgeDollarSign, Landmark, Hourglass, Scale, Lightbulb, Save, PrinterIcon, Package } from 'lucide-react';
 import { trpc } from '@/utils/trpc';
 import type { Printer, Filament, CostsConfig, CreateBudgetInput, BudgetCalculation } from '../../../server/src/schema';
 
@@ -137,7 +138,7 @@ export function BudgetCalculator({ printers, filaments, costsConfig, onBudgetCre
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="border-slate-200">
           <CardHeader>
-            <CardTitle className="text-lg">📝 Dados do Projeto</CardTitle>
+            <CardTitle className="text-lg"><FileText className="size-5 text-slate-700" /> Dados do Projeto</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -198,7 +199,7 @@ export function BudgetCalculator({ printers, filaments, costsConfig, onBudgetCre
 
         <Card className="border-slate-200">
           <CardHeader>
-            <CardTitle className="text-lg">🔢 Parâmetros de Impressão</CardTitle>
+            <CardTitle className="text-lg"><Settings className="size-5 text-slate-700" /> Parâmetros de Impressão</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -276,10 +277,10 @@ export function BudgetCalculator({ printers, filaments, costsConfig, onBudgetCre
                 disabled={!canCalculate || isCalculating}
                 className="bg-blue-600 hover:bg-blue-700 flex-1"
               >
-                {isCalculating ? 'Calculando...' : '🧮 Calcular Orçamento'}
+                {isCalculating ? 'Calculando...' : <><Calculator className="size-5" /> Calcular Orçamento</>}
               </Button>
               <Button variant="outline" onClick={resetForm}>
-                🗑️
+                <Eraser className="size-5" />
               </Button>
             </div>
           </CardContent>
@@ -291,12 +292,12 @@ export function BudgetCalculator({ printers, filaments, costsConfig, onBudgetCre
         <Card className="border-green-200 bg-green-50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg text-green-800">
-              💰 Resultado do Orçamento
+              <DollarSign className="size-5" /> Resultado do Orçamento
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="mb-4">
-              <h3 className="text-lg font-semibold text-green-800 mb-2">🎯 Valores Totais do Projeto</h3>
+              <h3 className="text-lg font-semibold text-green-800 mb-2"><BadgeDollarSign className="size-5" /> Valores Totais do Projeto</h3>
               <p className="text-sm text-slate-600">Valores calculados para {formData.pieces_quantity} peça{formData.pieces_quantity !== 1 ? 's' : ''}</p>
             </div>
             
@@ -328,7 +329,7 @@ export function BudgetCalculator({ printers, filaments, costsConfig, onBudgetCre
             {/* Detailed Breakdown */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-3">
-                <h4 className="font-semibold text-green-800">💸 Breakdown de Custos</h4>
+                <h4 className="font-semibold text-green-800"><Landmark className="size-5" /> Breakdown de Custos</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Material:</span>
@@ -359,7 +360,7 @@ export function BudgetCalculator({ printers, filaments, costsConfig, onBudgetCre
               </div>
 
               <div className="space-y-3">
-                <h4 className="font-semibold text-green-800">📊 Valores por Peça</h4>
+                <h4 className="font-semibold text-green-800"><DollarSign className="size-5" /> Valores por Peça</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Custo unitário:</span>
@@ -388,25 +389,25 @@ export function BudgetCalculator({ printers, filaments, costsConfig, onBudgetCre
               <div className="flex gap-4 text-sm">
                 {selectedPrinter && (
                   <Badge variant="outline" className="bg-blue-50">
-                    🖨️ {selectedPrinter.name}
+                    <PrinterIcon className="size-3.5" /> {selectedPrinter.name}
                   </Badge>
                 )}
                 {selectedFilament && (
                   <Badge variant="outline" className="bg-green-50">
-                    🧵 {selectedFilament.brand} {selectedFilament.name}
+                    <Package className="size-3.5" /> {selectedFilament.brand} {selectedFilament.name}
                   </Badge>
                 )}
                 <Badge variant="outline" className="bg-orange-50">
-                  ⏱️ {formData.print_time_hours}h
+                  <Hourglass className="size-3.5" /> {formData.print_time_hours}h
                 </Badge>
                 <Badge variant="outline" className="bg-purple-50">
-                  ⚖️ {formData.material_weight_g}g
+                  <Scale className="size-3.5" /> {formData.material_weight_g}g
                 </Badge>
               </div>
               
               {selectedPrinter && selectedPrinter.profit_percentage === 100 && (
                 <div className="text-xs text-slate-600 bg-blue-50 p-2 rounded">
-                  💡 <strong>Dica:</strong> Markup de 100% resulta em margem de lucro de 50% 
+                  <Lightbulb className="size-3.5" /> <strong>Dica:</strong> Markup de 100% resulta em margem de lucro de 50% 
                   (lucro sobre preço de venda). Para diferentes margens, ajuste o percentual de lucro da impressora.
                 </div>
               )}
@@ -419,7 +420,7 @@ export function BudgetCalculator({ printers, filaments, costsConfig, onBudgetCre
                 disabled={isSaving || !formData.name.trim()}
                 className="bg-green-600 hover:bg-green-700"
               >
-                {isSaving ? 'Salvando...' : '💾 Salvar Orçamento'}
+                {isSaving ? 'Salvando...' : <><Save className="size-5" /> Salvar Orçamento</>}
               </Button>
             </div>
           </CardContent>
