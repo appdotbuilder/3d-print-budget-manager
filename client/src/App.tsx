@@ -81,7 +81,7 @@ function App() {
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 bg-slate-700 rounded-lg flex items-center justify-center">
-              <span className="text-white text-xl">🖨️</span>
+              <PrinterIcon className="size-6 text-white" />
             </div>
             <div>
               <h1 className="text-3xl font-bold text-slate-900">Orçamento Impressão 3D</h1>
@@ -95,7 +95,7 @@ function App() {
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
-                    <span className="text-slate-700 text-sm">🖨️</span>
+                    <PrinterIcon className="size-5 text-slate-700" />
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-slate-900">{printers.length}</p>
@@ -109,7 +109,7 @@ function App() {
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
-                    <span className="text-slate-700 text-sm">🧵</span>
+                    <Package className="size-5 text-slate-700" />
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-slate-900">{filaments.length}</p>
@@ -123,7 +123,7 @@ function App() {
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
-                    <span className="text-slate-700 text-sm">📊</span>
+                    <ClipboardList className="size-5 text-slate-700" />
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-slate-900">{budgets.length}</p>
@@ -137,7 +137,7 @@ function App() {
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
-                    <span className="text-slate-700 text-sm">⚙️</span>
+                    <Settings className="size-5 text-slate-700" />
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-slate-900">
@@ -175,7 +175,7 @@ function App() {
             <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2">
-                  <span className="text-slate-700">📊</span>
+                  <Calculator className="size-5 text-slate-700" />
                   Calculadora de Orçamentos
                 </CardTitle>
                 <CardDescription>
@@ -197,7 +197,7 @@ function App() {
             <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2">
-                  <span className="text-slate-700">📋</span>
+                  <ClipboardList className="size-5 text-slate-700" />
                   Orçamentos Salvos
                 </CardTitle>
                 <CardDescription>
@@ -220,7 +220,7 @@ function App() {
             <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2">
-                  <span className="text-slate-700">🖨️</span>
+                  <PrinterIcon className="size-5 text-slate-700" />
                   Gerenciar Impressoras
                 </CardTitle>
                 <CardDescription>
@@ -240,7 +240,7 @@ function App() {
             <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2">
-                  <span className="text-slate-700">🧵</span>
+                  <Package className="size-5 text-slate-700" />
                   Gerenciar Filamentos
                 </CardTitle>
                 <CardDescription>
@@ -260,7 +260,7 @@ function App() {
             <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2">
-                  <span className="text-slate-700">⚙️</span>
+                  <Settings className="size-5 text-slate-700" />
                   Configuração de Custos
                 </CardTitle>
                 <CardDescription>
