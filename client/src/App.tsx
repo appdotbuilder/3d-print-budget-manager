@@ -80,7 +80,7 @@ function App() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-slate-700 rounded-lg flex items-center justify-center">
               <span className="text-white text-xl">🖨️</span>
             </div>
             <div>
@@ -94,8 +94,8 @@ function App() {
             <Card className="border-0 shadow-sm bg-white/60 backdrop-blur-sm">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <span className="text-blue-600 text-sm">🖨️</span>
+                  <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
+                    <span className="text-slate-700 text-sm">🖨️</span>
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-slate-900">{printers.length}</p>
@@ -108,8 +108,8 @@ function App() {
             <Card className="border-0 shadow-sm bg-white/60 backdrop-blur-sm">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                    <span className="text-green-600 text-sm">🧵</span>
+                  <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
+                    <span className="text-slate-700 text-sm">🧵</span>
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-slate-900">{filaments.length}</p>
@@ -122,8 +122,8 @@ function App() {
             <Card className="border-0 shadow-sm bg-white/60 backdrop-blur-sm">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <span className="text-purple-600 text-sm">📊</span>
+                  <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
+                    <span className="text-slate-700 text-sm">📊</span>
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-slate-900">{budgets.length}</p>
@@ -136,8 +136,8 @@ function App() {
             <Card className="border-0 shadow-sm bg-white/60 backdrop-blur-sm">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
-                    <span className="text-orange-600 text-sm">⚙️</span>
+                  <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
+                    <span className="text-slate-700 text-sm">⚙️</span>
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-slate-900">
@@ -175,7 +175,7 @@ function App() {
             <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2">
-                  <span className="text-blue-600">📊</span>
+                  <span className="text-slate-700">📊</span>
                   Calculadora de Orçamentos
                 </CardTitle>
                 <CardDescription>
@@ -197,7 +197,7 @@ function App() {
             <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2">
-                  <span className="text-green-600">📋</span>
+                  <span className="text-slate-700">📋</span>
                   Orçamentos Salvos
                 </CardTitle>
                 <CardDescription>
@@ -220,7 +220,7 @@ function App() {
             <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2">
-                  <span className="text-purple-600">🖨️</span>
+                  <span className="text-slate-700">🖨️</span>
                   Gerenciar Impressoras
                 </CardTitle>
                 <CardDescription>
@@ -240,7 +240,7 @@ function App() {
             <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2">
-                  <span className="text-orange-600">🧵</span>
+                  <span className="text-slate-700">🧵</span>
                   Gerenciar Filamentos
                 </CardTitle>
                 <CardDescription>
@@ -260,7 +260,7 @@ function App() {
             <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2">
-                  <span className="text-red-600">⚙️</span>
+                  <span className="text-slate-700">⚙️</span>
                   Configuração de Custos
                 </CardTitle>
                 <CardDescription>
